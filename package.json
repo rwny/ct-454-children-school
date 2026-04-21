@@ -1,0 +1,24 @@
+{
+  "name": "web20pointcloud_ply",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "electron-main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "electron": "electron .",
+    "electron:dev": "set NODE_ENV=development && electron .",
+    "electron:build": "npm run build && electron .",
+    "pack": "electron-packager . AR24 --platform=win32 --arch=x64 --out=dist-exe-ar24 --overwrite --icon=public/vite.svg --app-version=1.1.0 --win32metadata.CompanyName=AR3D --win32metadata.ProductName=AR24 --win32metadata.FileDescription=GPU-Accelerated Pointcloud Viewer --win32metadata.OriginalFilename=AR24.exe --ignore=\"release|release-build|dist_electron|node_modules|dist-exe|dist-exe-ar24\""
+  },
+  "devDependencies": {
+    "vite": "^7.2.4",
+    "electron": "^35.0.0",
+    "electron-packager": "^17.1.2"
+  },
+  "dependencies": {
+    "three": "^0.182.0"
+  }
+}

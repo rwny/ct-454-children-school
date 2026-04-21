@@ -1,0 +1,1447 @@
+/* General Styles */
+body {
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  /* background: linear-gradient(to bottom, #2980b9 0%, #6dd5fa 50%, #d4d4d4 100%); */
+  color: #ffffff;
+  font-family: 'Noto Sans', sans-serif;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Main container for the 3D scene */
+#app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Loader */
+#loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(60, 60, 60, 0.7);
+  color: #ffffff;
+  font-family: 'Noto Sans', 'Courier New', monospace;
+  font-size: 0.85rem;
+  padding: 10px 20px;
+  border-radius: 5px;
+  backdrop-filter: blur(5px);
+  z-index: 100;
+}
+
+/* Main Sidebar Container (now with Axis Clip as primary content) */
+#main-sidebar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+  min-width: 460px;
+  width: 460px; /* Fixed width to match doubled size */
+}
+
+/* Hide sidebar-info by default */
+#sidebar-info {
+  display: none;
+}
+
+/* Slider Section: Contains both vertical and horizontal sliders */
+#slider-section {
+  background: rgba(60, 60, 60, 0.7);
+  backdrop-filter: blur(10px);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Numpad Section: Contains mode and keymap */
+#numpad-section {
+  background: rgba(60, 60, 60, 0.7);
+  backdrop-filter: blur(10px);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-family: 'Noto Sans', 'Courier New', monospace;
+  font-size: 0.7rem;
+}
+
+#numpad-section div {
+  margin: 2px 0;
+  padding: 2px 0;
+}
+
+#numpad-section #ui-camera-mode {
+  color: #cccccc;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+#numpad-section #camera-help {
+  color: #cccccc;
+}
+
+/* Numpad Rows */
+.numpad-row {
+  margin: 2px 0;
+  line-height: 1.2;
+}
+
+.control-group {
+  margin-bottom: 15px;
+}
+
+.control-group:last-child {
+  margin-bottom: 0;
+}
+
+/* Toggle Switch Styles */
+.toggle-container {
+  margin-bottom: 10px;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  font-family: 'Noto Sans', 'Courier New', monospace;
+  font-size: 0.8rem;
+  color: #ffffff;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  margin-right: 10px;
+  transition: background-color 0.3s;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+  transform: translateX(20px);
+}
+
+.toggle-label {
+  user-select: none;
+}
+
+/* Point Size Slider - Match axis clip slider styling */
+#point-size-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: #444;
+  outline: none;
+  margin: 0;
+}
+
+#point-size-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 0 4px rgba(0,0,0,0.5);
+}
+
+#point-size-slider::-webkit-slider-thumb:active {
+  cursor: pointer;
+  transform: scale(1.1);
+  box-shadow: 0 0 6px rgba(0,0,0,0.7);
+}
+
+#point-size-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 4px rgba(0,0,0,0.5);
+}
+
+#point-size-slider::-moz-range-thumb:active {
+  transform: scale(1.1);
+  box-shadow: 0 0 6px rgba(0,0,0,0.7);
+}
+
+/* Point Size Slider Container */
+#point-size-control .slider-container {
+  position: relative;
+  padding: 10px 0;
+}
+
+/* Point Size Value Display */
+#point-size-control .slider-value {
+  color: #ffffff;
+  font-family: 'Noto Sans', 'Courier New', monospace;
+  font-size: 0.8rem;
+  text-align: center;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* Custom Properties and Animations for Enhanced Sliders */
+@property --value {
+  initial-value: 0;
+  syntax: '<integer>';
+  inherits: true;
+}
+
+:root {
+  timeline-scope: --thumb-y;
+}
+
+/* Animation for value synchronization */
+@keyframes sync-y {
+  to { --value: 100; }
+}
+
+#y-clipping-slider {
+  animation: sync-y both linear reverse;
+  animation-timeline: --thumb-y;
+  animation-range: contain;
+}
+
+/* X-Axis Sliders Container */
+.x-sliders-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 5px;
+  width: 100%;
+}
+
+.x-slider-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.x-slider-group .slider-label {
+  color: #ffffff;
+  font-family: 'Noto Sans', 'Courier New', monospace;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.x-slider-group input[type="range"] {
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(to right, #ffffff 0%, #ffffff 50%, #cccccc 50%, #cccccc 100%);
+  outline: none;
+  border-radius: 3px;
+}
+
+/* Radio Button Styles */
+.radio-group {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-bottom: 5px;
+  justify-content: center;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-family: 'Noto Sans', 'Courier New', monospace;
+  font-size: 0.75rem;
+  color: #ffffff;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.radio-option input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.radio-checkmark {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  margin-right: 8px;
+  transition: background-color 0.3s;
+}
+
+.radio-checkmark:after {
+  position: absolute;
+  content: "";
+  display: none;
+  top: 4px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+.radio-option input:checked ~ .radio-checkmark {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.radio-option input:checked ~ .radio-checkmark:after {
+  display: block;
+}
+
+.radio-label {
+  user-select: none;
+}
+
+/* Main container for the 3D scene */
+#app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Main Sidebar Container */
+#main-sidebar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 100;
+  background: transparent;
+  padding: 10px;
+}
+
+/* Slider Section */
+#slider-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Control Group */
+.control-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Control Header */
+.control-header {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 12px;
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+
+/* Slider Container */
+.slider-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  position: relative;
+}
+
+/* Vertical Slider Container - Full height left sidebar */
+#y-slider-container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 60px;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px 0;
+  box-sizing: border-box;
+}
+
+/* Custom Properties for Slider Values */
+@property --value {
+  initial-value: 0;
+  syntax: '<integer>';
+  inherits: true;
+}
+
+/* Vertical Slider - Full screen height with enhanced styling */
+#y-slider-container #y-clipping-slider {
+  --hue: calc(var(--value, 0));
+  overflow: hidden;
+  width: 20px;
+  height: 80vh;
+  accent-color: hsl(var(--hue) 90% 66%);
+  outline: none;
+  border-radius: 10px;
+  writing-mode: vertical-lr;
+  direction: rtl;
+  width: 12px;
+  height: 200px; /* or appropriate height */
+  writing-mode: bt-lr;
+  margin: 0;
+  background: transparent;
+}
+
+#y-slider-container #y-clipping-slider::-webkit-slider-thumb {
+  anchor-name: --thumb-y;
+  view-timeline-name: --thumb-y;
+  view-timeline-axis: block;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 40px;
+  height: 40px;
+  background: hsl(120, 70%, 50%);
+  cursor: -webkit-grab;
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.7) inset, 0 5px 15px -5px black;
+  border: 2px solid hsl(0 0% 50%);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#y-slider-container #y-clipping-slider::-webkit-slider-thumb:active {
+  cursor: -webkit-grabbing;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.9) inset, 0 8px 20px -5px black;
+}
+
+#y-slider-container #y-clipping-slider::-moz-range-thumb {
+  width: 40px;
+  height: 40px;
+  background: hsl(120, 70%, 50%);
+  cursor: pointer;
+  border-radius: 50%;
+  border: 2px solid hsl(0 0% 50%);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.7) inset, 0 5px 15px -5px black;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#y-slider-container #y-clipping-slider::-moz-range-thumb:active {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.9) inset, 0 8px 20px -5px black;
+}
+
+/* Section Bar Container - Bottom of page */
+#section-bar-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: rgba(0, 0, 0, 0.0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* Radio Buttons Container */
+.radio-group-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-right: 30px;
+}
+
+/* X-axis Slider Container */
+#x-slider-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 600px;
+}
+
+/* X-axis Slider - Full width with enhanced styling */
+#x-clip-slider {
+  --hue: calc(var(--value, 0));
+  overflow: hidden;
+  width: 100%;
+  height: 20px;
+  accent-color: hsl(var(--hue) 90% 66%);
+  outline: none;
+  border-radius: 10px;
+  margin: 0;
+  background: transparent;
+}
+
+/* Active unified slider and export UI */
+#active-axis-label {
+  font-weight: 600;
+  color: #eaeaea;
+}
+
+#active-clipping-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  background: linear-gradient(90deg, #4CAF50 0%, #4CAF50 50%, #555 50%, #555 100%);
+  border-radius: 6px;
+  outline: none;
+}
+
+#active-clipping-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  cursor: pointer;
+}
+
+.export-btn {
+  padding: 6px 12px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.7rem;
+  width: 100%;
+}
+
+.export-btn:hover { opacity: 0.95; transform: translateY(-1px); transition: 0.12s ease; }
+
+.color-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.7rem;
+  color: #ffffff;
+  background: #4CAF50;
+  width: 100%;
+}
+
+.color-mode-group {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.black-color-picker-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: #e6e6e6;
+  font-size: 0.68rem;
+}
+
+.black-color-picker-wrap input[type="color"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.black-color-picker-wrap input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.black-color-picker-wrap input[type="color"]::-webkit-color-swatch {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+}
+
+.black-color-picker-wrap input[type="color"]::-moz-color-swatch {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+}
+
+.color-btn.is-off {
+  background: #666;
+  color: #e0e0e0;
+}
+
+.color-btn.is-active {
+  background: #4CAF50;
+  color: #ffffff;
+}
+
+/* ISO button state */
+.iso-btn.is-inactive {
+  background: #555 !important;
+  color: #bbb !important;
+  opacity: 0.85;
+}
+
+.iso-btn.is-active {
+  background: #2196F3 !important;
+  color: #ffffff !important;
+}
+
+.iso-btn {
+  width: 100%;
+}
+
+#x-clip-slider::-webkit-slider-thumb {
+  anchor-name: --thumb-x;
+  view-timeline-name: --thumb-x;
+  view-timeline-axis: inline;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 40px;
+  height: 40px;
+  background: hsl(120, 70%, 50%);
+  cursor: -webkit-grab;
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.7) inset, 0 5px 15px -5px black;
+  border: 2px solid hsl(0 0% 50%);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#x-clip-slider::-webkit-slider-thumb:active {
+  cursor: -webkit-grabbing;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.9) inset, 0 8px 20px -5px black;
+}
+
+#x-clip-slider::-moz-range-thumb {
+  width: 40px;
+  height: 40px;
+  background: hsl(120, 70%, 50%);
+  cursor: pointer;
+  border-radius: 50%;
+  border: 2px solid hsl(0 0% 50%);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.7) inset, 0 5px 15px -5px black;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#x-clip-slider::-moz-range-thumb:active {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.9) inset, 0 8px 20px -5px black;
+}
+
+/* Enhanced Slider Value Containers with Value Display */
+.slider-value-container {
+  position: relative;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Value Display for Y-slider */
+#y-slider-container .hint {
+  border-radius: 6px;
+  color: hsl(0 0% 98%);
+  counter-reset: val var(--value);
+  display: grid;
+  font-size: 0.875rem;
+  place-items: center;
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  background: hsl(0 0% 0%);
+  border: 1px solid hsl(0 0% 50%);
+  box-shadow: 0 1px hsl(0 0% 100% / 0.75) inset, 0 5px 10px -5px black;
+  padding: 4px 8px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+#y-slider-container:hover .hint {
+  opacity: 1;
+}
+
+#y-slider-container .hint::after {
+  content: "Y: " counter(val);
+  font-variant: tabular-nums;
+  font-weight: 400;
+}
+
+/* Special handling for Y-slider container */
+.slider-container {
+  position: relative;
+}
+
+/* Special handling for Y-slider value container */
+.slider-container .slider-value-container {
+  position: absolute;
+  left: -35px;  /* Position to the left of the slider */
+  top: 50%;    /* Center vertically */
+  transform: translateY(-50%);  /* Perfect vertical centering */
+  height: auto;
+  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;  /* Right-align the text */
+  z-index: 10;
+}
+
+/* General slider value styles */
+.slider-value {
+  font-family: 'Noto Sans', 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: #ffffff;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Specific Y-slider value positioning - already handled by container */
+.slider-container .slider-value {
+  text-align: right;
+}
+
+/* Special positioning for X-slider value */
+.x-slider-group .slider-value {
+  position: static;
+  transform: none;
+  left: auto;
+  bottom: auto;
+  margin-top: 8px;
+  font-size: 0.75rem;
+}
+
+/* Special positioning for X-slider value container */
+.x-slider-group .slider-value-container {
+  position: static;
+  height: auto;
+  width: auto;
+}
+
+/* Ensure X-slider value container doesn't conflict with Y-slider */
+#container-a .x-slider-group .slider-value-container {
+  position: static !important;
+  height: auto !important;
+  width: auto !important;
+}
+
+#container-a .x-slider-group .slider-value {
+  position: static !important;
+  transform: none !important;
+  left: auto !important;
+  bottom: auto !important;
+  margin-top: 8px !important;
+  font-size: 0.75rem !important;
+}
+
+/* X-Axis Sliders Container */
+.x-sliders-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 5px;
+  width: 100%;
+}
+
+.x-slider-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.x-slider-group .slider-label {
+  color: #ffffff;
+  font-family: 'Noto Sans', 'Courier New', monospace;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+/* Radio Button Styles */
+.radio-group {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-bottom: 5px;
+  justify-content: center;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-family: 'Noto Sans', 'Courier New', monospace;
+  font-size: 0.75rem;
+  color: #ffffff;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.radio-option input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.radio-checkmark {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  margin-right: 8px;
+  transition: background-color 0.3s;
+}
+
+.radio-checkmark:after {
+  position: absolute;
+  content: "";
+  display: none;
+  top: 4px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+.radio-option input:checked ~ .radio-checkmark {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.radio-option input:checked ~ .radio-checkmark:after {
+  display: block;
+}
+
+.radio-label {
+  user-select: none;
+}
+
+/* Sidebar Info Container */
+#sidebar-info {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Reduced gap */
+  z-index: 1000;
+  min-width: 220px; /* Compact width */
+  width: 220px; /* Compact width */
+  background: transparent; /* Removed background */
+  backdrop-filter: none; /* Removed blur effect */
+  border-radius: 10px;
+  padding: 8px; /* Reduced padding */
+  color: white;
+  font-family: 'Noto Sans', sans-serif;
+  box-shadow: none; /* Removed shadow */
+  transition: transform 0.3s ease; /* Smooth sliding animation */
+}
+
+#sidebar-info.sidebar-hidden {
+  transform: translateX(calc(100% + 20px)); /* Slide out to the right */
+}
+
+.sidebar-toggle-btn {
+  position: absolute;
+  top: 10px;
+  left: -40px; /* Position outside the sidebar */
+  width: 30px;
+  height: 30px;
+  background: rgba(30, 30, 30, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%; /* Circular shape */
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  backdrop-filter: blur(10px);
+  transition: background 0.3s ease;
+}
+
+.sidebar-toggle-btn:hover {
+  background: rgba(50, 50, 50, 0.9);
+}
+
+/* Sidebar Sections */
+.sidebar-section {
+  background: rgba(60, 60, 60, 0.7);
+  backdrop-filter: blur(10px);
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-family: 'Noto Sans', 'Courier New', monospace;
+  font-size: 0.7rem;
+}
+
+.section-header {
+  color: #ffffff;
+  font-weight: bold;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  font-size: 0.72rem;
+}
+
+.section-content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Model Info Elements */
+#file-name {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+#camera-mode-display {
+  color: #cccccc;
+}
+
+#point-info {
+  color: #aaaaaa;
+  font-size: 0.7rem;
+}
+
+/* UI Info Elements */
+#ui-camera-mode {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+#numpad-help {
+  color: #cccccc;
+  font-size: 0.65rem;
+  line-height: 1.3;
+}
+
+#version-display {
+  color: #aaaaaa;
+  font-size: 0.7rem;
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* Data Section Elements */
+.data-item {
+  color: #cccccc;
+  font-size: 0.7rem;
+  padding: 2px 0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.data-item:hover {
+  color: #ffffff;
+}
+
+.measure-mode-buttons {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.ui-mode-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.ui-mode-btn {
+  flex: 1;
+  padding: 5px 8px;
+  background: #555;
+  color: #f2f2f2;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Noto Sans', 'Courier New', monospace;
+  font-size: 0.68rem;
+}
+
+.ui-mode-btn.is-active {
+  background: #2196F3;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+body.ui-simple-mode .advanced-only {
+  display: none !important;
+}
+
+.measure-unit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: #d4d4d4;
+  font-size: 0.68rem;
+}
+
+.measure-unit-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.measure-unit-btn {
+  background: #555;
+  color: #f2f2f2;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  padding: 2px 8px;
+  cursor: pointer;
+}
+
+.measure-unit-btn.is-active {
+  background: #ff6f3d;
+  color: #ffffff;
+  border: none;
+}
+
+.measure-btn {
+  flex: 1;
+  padding: 5px 8px;
+  background: #555;
+  color: #f2f2f2;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Noto Sans', 'Courier New', monospace;
+  font-size: 0.68rem;
+}
+
+.measure-btn.is-active {
+  background: #ff6f3d;
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+}
+
+/* Layer Buttons */
+.layer-btn {
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.5);
+  color: #4CAF50;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 0.7rem;
+  transition: all 0.2s;
+  width: 100%;
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+.layer-btn:hover {
+  background: rgba(76, 175, 80, 0.3);
+  border-color: #4CAF50;
+  color: #ffffff;
+}
+
+.layer-btn.active {
+  background: #4CAF50;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+}
+
+/* Camera Panel */
+#camera-panel {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  color: #ffffff;
+  font-family: 'Noto Sans', 'Courier New', monospace;
+  font-size: 0.7rem;
+  padding: 8px;
+  border-radius: 5px;
+  z-index: 100;
+  text-align: left;
+  min-width: 200px;
+}
+
+#camera-panel div {
+  margin: 2px 0;
+  padding: 2px 0;
+}
+
+#camera-panel #camera-mode {
+  color: #ffffff;
+  font-weight: bold;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  margin-bottom: 4px;
+}
+
+#point-count {
+  color: #cccccc;
+  font-size: 0.8rem;
+  margin: 4px 0;
+  font-family: 'Noto Sans', 'Courier New', monospace;
+}
+
+#version-info {
+  color: #aaaaaa;
+  font-size: 0.7rem;
+  margin: 4px 0;
+  font-family: 'Noto Sans', 'Courier New', monospace;
+  text-align: center;
+}
+
+#camera-panel #camera-help {
+  color: #cccccc;
+}
+
+.numpad-row {
+  margin: 2px 0;
+  line-height: 1.2;
+}
+
+/* Info Panel */
+#info-panel {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: transparent;
+  color: #4CAF50;
+  font-family: 'Noto Sans', 'Courier New', monospace;
+  font-size: 0.8rem;
+  padding: 0;
+  z-index: 100;
+  text-align: left;
+}
+
+#info-panel #info {
+  color: #4CAF50;
+}
+
+/* Loader */
+#loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-family: 'Noto Sans', 'Courier New', monospace;
+  font-size: 1rem;
+  z-index: 200;
+  text-align: center;
+}
+
+/* Horizontal Slider Styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: #444;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 0 4px rgba(0,0,0,0.5);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 4px rgba(0,0,0,0.5);
+}
+
+/* Number Input Styling */
+input[type="number"] {
+  width: 60px;
+  padding: 4px 6px;
+  font-size: 0.7rem;
+  text-align: center;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 4px;
+  color: white;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+  background-color: #2196F3;
+}
+
+input:checked + .toggle-slider:before {
+  transform: translateX(20px);
+}
+
+.toggle-label {
+  user-select: none;
+}
+
+/* Compact toggle for thickness checkbox */
+.compact-switch .toggle-slider {
+  width: 28px;
+  height: 14px;
+  border-radius: 14px;
+}
+
+.compact-switch .toggle-slider:before {
+  width: 10px;
+  height: 10px;
+  left: 2px;
+  bottom: 2px;
+}
+
+.compact-switch input:checked + .toggle-slider:before {
+  transform: translateX(14px);
+}
+
+/* Toggle switch for clip mode */
+#clip-mode-toggle {
+  margin: 0 5px;
+}
+
+/* Thickness display same color as height display */
+#thickness-display {
+  color: #ffffff; /* Same color as height display */
+}
+
+/* Walk mode hint at the bottom of sidebar */
+#walk-mode-tip {
+  margin-top: 6px;
+  padding: 4px 6px;
+  color: #000000;
+  background: #ffffff;
+  border-radius: 4px;
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 400;
+  text-align: center;
+}
+
+.vertical-slider { writing-mode: vertical-lr; direction: rtl; width: 12px; height: 100%; accent-color: #4CAF50; cursor: pointer; margin: 0; } #y-slider-container { display: none !important; }
+
+#point-position-label,
+.point-position-label {
+  position: fixed;
+  z-index: 2200;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #111111;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 0.72rem;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+/* Disabled slider styles */
+input[type="range"]:disabled {
+  opacity: 0.5;
+  filter: grayscale(100%);
+  cursor: not-allowed;
+  background: #666 !important;
+}
+
+input[type="range"]:disabled::-webkit-slider-thumb {
+  background: #aaa !important;
+  cursor: not-allowed;
+}
+
+input[type="range"]:disabled::-moz-range-thumb {
+  background: #aaa !important;
+  cursor: not-allowed;
+}
+
+input[type="number"]:disabled {
+  opacity: 0.5;
+  filter: grayscale(100%);
+  cursor: not-allowed;
+  background-color: #444;
+  color: #aaa;
+}
+
+/* Hide spin buttons for view/section numeric inputs (type-to-edit only) */
+#active-clipping-input::-webkit-outer-spin-button,
+#active-clipping-input::-webkit-inner-spin-button,
+#slice-thickness-input::-webkit-outer-spin-button,
+#slice-thickness-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#active-clipping-input,
+#slice-thickness-input {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Active axis button styling */
+.axis-btn.active {
+  background: #2196F3 !important;
+  color: white !important;
+}
+
+.axis-selection-buttons {
+  width: 100%;
+}
+
+.axis-selection-buttons .axis-btn {
+  flex: 1;
+  width: 100%;
+}
+
+.reset-btn-full {
+  width: 100%;
+  margin-top: 6px;
+}
+
+#view-quick-controls {
+  position: fixed;
+  right: 152px;
+  bottom: 14px;
+  z-index: 2200;
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  background: rgba(24, 24, 24, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+}
+
+#view-quick-controls button {
+  border: none;
+  background: #444;
+  color: #ffffff;
+  font-size: 0.82rem;
+  line-height: 1;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#view-quick-controls button:hover {
+  background: #5a5a5a;
+}
+
+#view-quick-controls button.is-active {
+  background: #2196F3;
+}
+
+#app-version-badge {
+  position: fixed;
+  left: 12px;
+  bottom: 10px;
+  z-index: 1200;
+  font-size: 12px;
+  color: #d6d6d6;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 4px;
+  padding: 3px 8px;
+  line-height: 1.2;
+  pointer-events: none;
+}

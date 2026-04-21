@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AR24</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+
+<body>
+
+  <!-- Sidebar Info - Top Right -->
+  <div id="sidebar-info" class="sidebar-hidden">
+    <button id="sidebar-toggle" class="sidebar-toggle-btn">&lt;</button>
+
+    <!-- Model Info Section -->
+    <div class="sidebar-section" id="model-info">
+      <div class="section-header">Model Info</div>
+      <div class="section-content">
+        <div id="file-name">pointcloud - AAD.AR24</div>
+        <div id="camera-mode-display">Mode: Perspective</div>
+        <div id="point-info">0 points</div>
+      </div>
+    </div>
+
+    <!-- UI Info Section -->
+    <div class="sidebar-section" id="ui-info" style="display: none;">
+      <div class="section-content" style="padding-top: 10px;">
+        <div id="switch-mode-hint" style="text-align: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+          <div style="font-size: 2.5rem; font-weight: bold; color: #4CAF50; line-height: 1;">C</div>
+          <div style="font-size: 0.7rem; color: #aaaaaa; margin-top: 4px;">switch mode</div>
+        </div>
+        <div id="ui-camera-mode" style="margin-bottom: 8px; font-weight: bold;">Mode: Fly</div>
+        <div id="numpad-help">
+          <div class="numpad-row">1:Front | 3:Right | 7:Top</div>
+          <div class="numpad-row advanced-only">9:Flip</div>
+          <div class="numpad-row advanced-only">8426: Pan View</div>
+          <div class="numpad-row advanced-only">0:Perspective | 5:P/O Toggle</div>
+          <div class="numpad-row advanced-only">+:Zoom In | -:Zoom Out</div>
+        </div>
+        <div id="walk-help" style="display: none;">
+          <div class="numpad-row">WASD : walk</div>
+          <div class="numpad-row">+ shift : sprint</div>
+          <div class="numpad-row">+ space bar : jump</div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <!-- Data Section -->
+    <div class="sidebar-section" id="ui-mode-info" style="display: none;">
+      <div class="section-header">UI Mode</div>
+      <div class="section-content">
+        <div class="ui-mode-buttons">
+          <button id="ui-mode-simple-btn" class="ui-mode-btn is-active" type="button">Simple</button>
+          <button id="ui-mode-advanced-btn" class="ui-mode-btn" type="button">Advanced</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Section -->
+    <div class="sidebar-section" id="data-info">
+      <div class="section-header">Measure</div>
+      <div class="section-content">
+        <div class="measure-mode-buttons">
+          <button id="measure-level-btn" class="measure-btn is-active">Level</button>
+          <button id="measure-distance-btn" class="measure-btn">Distance</button>
+        </div>
+        <div class="measure-unit-row">
+          <span>Unit</span>
+          <div class="measure-unit-buttons">
+            <button id="measure-unit-m" class="measure-unit-btn" type="button">m</button>
+            <button id="measure-unit-cm" class="measure-unit-btn is-active" type="button">cm</button>
+            <button id="measure-unit-mm" class="measure-unit-btn" type="button">mm</button>
+          </div>
+        </div>
+        <div class="data-item" id="camera-data">Camera: --</div>
+        <div class="data-item" id="level-data">Level: --</div>
+        <div class="data-item" id="distance-data">Distance A-B: --</div>
+      </div>
+    </div>
+
+    <!-- Layers Section -->
+    <div class="sidebar-section" id="layers-info" style="display: none;">
+      <div class="section-header">Layers</div>
+      <div class="section-content">
+        <button id="toggle-cctv" class="layer-btn">CCTV View</button>
+        <!-- Power Lines Hidden as requested -->
+      </div>
+    </div>
+
+    <!-- Clipping Settings Section -->
+    <div class="sidebar-section" id="clipping-settings">
+      <div class="section-header">View &amp; Section</div>
+      <div class="section-content">
+        <div class="camera-mode-buttons advanced-only" style="margin-bottom: 6px; display: flex; justify-content: center; gap: 6px;">
+          <button id="cam-perspective-btn" class="reset-btn" style="padding: 4px 10px; background: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.7rem;">Perspective</button>
+          <button id="cam-ortho-btn" class="reset-btn" style="padding: 4px 10px; background: #444; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.7rem;">Ortho</button>
+          <button id="orbit-toggle-btn" class="reset-btn" style="padding: 4px 10px; background: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.7rem;">Free</button>
+        </div>
+
+        <!-- Axis Selection Buttons -->
+        <div class="axis-selection-buttons" style="margin-bottom: 6px; display: flex; gap: 6px; justify-content: center;">
+          <button id="axis-y-btn" class="axis-btn" style="padding: 4px 8px; background: #444; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.7rem;">Top (7)</button>
+          <button id="axis-z-btn" class="axis-btn" style="padding: 4px 8px; background: #444; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.7rem;">Front (1)</button>
+          <button id="axis-x-btn" class="axis-btn" style="padding: 4px 8px; background: #444; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.7rem;">Side (3)</button>
+        </div>
+
+        <div class="horizontal-clipping-controls advanced-only" style="display: flex; flex-direction: column; gap: 8px; padding: 8px 0;">
+           <!-- Active-Slider Group: single slider that maps to current camera view -->
+           <div class="axis-slider-group" style="display: flex; align-items: center; gap: 8px;">
+              <div id="active-axis-label" style="font-size: 0.7rem; color: #ffffff; min-width: 34px; text-align: left;">Active</div>
+              <input type="range" id="active-clipping-slider" min="-15" max="15" step="0.1" value="3" style="flex: 1; height: 8px; -webkit-appearance: none; background: #444; border-radius: 4px; outline: none;">
+              <input type="number" id="active-clipping-input" min="-15" max="15" step="0.1" value="3" style="width: 44px; padding: 3px 4px; font-size: 0.65rem; text-align: center;">
+           </div>
+
+           <!-- Thickness Controls for the active slice -->
+           <div class="thickness-control-group" style="display: flex; align-items: center; gap: 8px;">
+              <button id="clip-mode-toggle-btn" style="padding: 3px 8px; background: #444; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.7rem; font-weight: 600; min-width: 42px;">Slice</button>
+              <input type="checkbox" id="clip-mode-toggle" style="display:none;">
+              <input type="range" id="slice-thickness-slider" min="0.1" max="2.0" step="0.1" value="0.5" style="flex: 1; height: 8px; -webkit-appearance: none; background: #444; border-radius: 4px; outline: none;">
+              <input type="number" id="slice-thickness-input" min="0.1" max="2.0" step="0.1" value="0.5" style="width: 44px; padding: 3px 4px; font-size: 0.65rem; text-align: center;">
+           </div> 
+        </div>
+        <button id="reset-view-btn" class="reset-btn reset-btn-full" style="padding: 4px 10px; background: #444; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.7rem;">Reset View</button>
+      </div>
+    </div>
+
+    <!-- Point Size / Color / Export -->
+    <div class="sidebar-section" id="point-size-control">
+      <div class="section-header">Display &amp; Export</div>
+      <div class="section-content">
+        <div class="slider-container" style="padding-top: 4px;">
+          <input type="range" id="point-size-slider" min="0.01" max="0.21" step="0.02" value="0.05">
+        </div>
+        <div class="color-mode-group">
+          <button id="color-original-btn" class="color-btn">Original</button>
+          <button id="color-gradient-btn" class="color-btn">Gradient</button>
+          <button id="color-black-btn" class="color-btn">Black</button>
+        </div>
+        <div id="black-color-picker-wrap" class="black-color-picker-wrap" style="display: none;">
+          <label for="black-color-picker">Black Color</label>
+          <input id="black-color-picker" type="color" value="#000000" aria-label="Black mode color picker">
+        </div>
+        <div style="display: flex; gap: 6px;">
+          <button id="export-png-btn" class="export-btn" style="flex:1;">Export PNG</button>
+          <button id="export-dxf-btn" class="export-btn" style="flex:1;">Export DXF</button>
+        </div>
+        <button id="export-batch-dxf-btn" style="display:none;">Batch DXF</button>
+      </div>
+    </div>
+    <div id="walk-mode-tip">press C switch to walk mode</div>
+
+  </div>
+
+
+  <div id="loader">Loading... 0%</div>
+
+  <div id="app"></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
+
