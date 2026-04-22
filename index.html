@@ -132,7 +132,7 @@
 
     <!-- Point Size / Color / Export -->
     <div class="sidebar-section" id="point-size-control">
-      <div class="section-header">Display &amp; Export</div>
+      <div class="section-header">Point Size</div>
       <div class="section-content">
         <div class="slider-container" style="padding-top: 4px;">
           <input type="range" id="point-size-slider" min="0.01" max="0.21" step="0.02" value="0.05">
@@ -158,7 +158,19 @@
   </div>
 
 
+  <div id="model-switcher" style="position: absolute; top: 10px; left: 10px; z-index: 1000; display: flex; gap: 8px;">
+    <button id="btn-canteen" class="model-switch-btn" style="padding: 8px 16px; background: rgba(0,0,0,0.6); color: white; border: 1px solid #4CAF50; border-radius: 4px; cursor: pointer; font-family: 'Noto Sans', sans-serif;">Canteen</button>
+    <button id="btn-bed" class="model-switch-btn" style="padding: 8px 16px; background: rgba(0,0,0,0.6); color: white; border: 1px solid #2196F3; border-radius: 4px; cursor: pointer; font-family: 'Noto Sans', sans-serif;">ห้องพัก</button>
+  </div>
+
   <div id="loader">Loading... 0%</div>
+
+  <div id="unused-bottom-controls" style="position: absolute; bottom: 20px; right: 20px; z-index: 1000; display: none; gap: 8px;">
+    <button style="padding: 8px 16px; background: rgba(0,0,0,0.6); color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer;">Button 1</button>
+    <button style="padding: 8px 16px; background: rgba(0,0,0,0.6); color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer;">Button 2</button>
+    <button style="padding: 8px 16px; background: rgba(0,0,0,0.6); color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer;">Button 3</button>
+    <button style="padding: 8px 16px; background: rgba(0,0,0,0.6); color: white; border: 1px solid #444; border-radius: 4px; cursor: pointer;">Button 4</button>
+  </div>
 
   <div id="app"></div>
   <script type="module" src="/src/main.js"></script>

@@ -704,7 +704,7 @@ function isSimpleUiMode() {
 
 function updateQuickControlsVisibility() {
   if (!quickControlsRoot) return;
-  quickControlsRoot.style.display = currentMode === 'fly' && !isSimpleUiMode() ? 'flex' : 'none';
+  quickControlsRoot.style.display = 'none'; // Always hide for this project
 }
 
 function setPanMode(enabled, { enableOrbitWhenOff = false } = {}) {
@@ -861,13 +861,31 @@ initQuickViewControls();
 setPanMode(false);
 
 // Load Point Cloud Sequentially to prevent memory errors
-const plyFiles = [
-  './ply/metta-school.ply'
-];
+const MODELS = {
+  canteen: ['./ply/children-canteen.ply'],
+  bed: ['./ply/children-bed.ply']
+};
+
 window.loadedPoints = []; // Make loadedPoints available globally
 
-async function initializeModels() {
+async function initializeModel(plyFiles) {
+  // Clear existing points from scene
+  if (window.loadedPoints && window.loadedPoints.length > 0) {
+    window.loadedPoints.forEach(p => {
+      scene.remove(p);
+      if (p.geometry) p.geometry.dispose();
+      if (p.material) p.material.dispose();
+    });
+    window.loadedPoints = [];
+  }
+
   const loaderElement = document.getElementById('loader');
+  if (loaderElement) {
+    loaderElement.style.display = 'block';
+    loaderElement.style.opacity = '1';
+    loaderElement.innerText = `Loading... 0%`;
+  }
+
   const result = await loadPointCloudModels({
     scene,
     plyFiles,
@@ -881,6 +899,13 @@ async function initializeModels() {
   });
 
   window.loadedPoints = result.loadedPoints;
+
+  // Update model name in sidebar
+  const fileNameElement = document.getElementById('file-name');
+  if (fileNameElement) {
+    const fileName = plyFiles[0].split('/').pop().replace('.ply', '');
+    fileNameElement.textContent = `pointcloud - ${fileName}`;
+  }
 
   if (
     isFinite(result.worldBounds.minX) && isFinite(result.worldBounds.maxX) &&
@@ -910,12 +935,12 @@ async function initializeModels() {
   animationUniforms.uMaxDistance.value = Number.isFinite(maxDistance) ? maxDistance : 100;
   animationUniforms.uMaxY.value = Number.isFinite(maxY) ? maxY : 15;
 
-  // Reset clipping planes to default values.
-  yClippingPlane.constant = 2.4;
+  // Reset clipping planes to default values based on new model bounds
+  yClippingPlane.constant = window.axisRanges.y.max; // Start from top
   yClippingPlaneBottom.constant = -window.axisRanges.y.min;
-  xClippingPlane.constant = getDefaultAxisValue(window.axisRanges.x);
+  xClippingPlane.constant = window.axisRanges.x.max;
   xClippingPlaneBack.constant = -window.axisRanges.x.min;
-  zClippingPlane.constant = getDefaultAxisValue(window.axisRanges.z);
+  zClippingPlane.constant = window.axisRanges.z.max;
   zClippingPlaneFront.constant = -window.axisRanges.z.min;
   
   // Update legacy slider ranges if present in DOM.
@@ -931,24 +956,35 @@ async function initializeModels() {
     if (ySlider) {
       ySlider.min = window.axisRanges.y.min;
       ySlider.max = window.axisRanges.y.max;
-      ySlider.value = getDefaultAxisValue(window.axisRanges.y);
+      ySlider.value = window.axisRanges.y.max;
       if (yInput) yInput.value = ySlider.value;
     }
     
     if (xSlider) {
       xSlider.min = window.axisRanges.x.min;
       xSlider.max = window.axisRanges.x.max;
-      xSlider.value = getDefaultAxisValue(window.axisRanges.x);
+      xSlider.value = window.axisRanges.x.max;
       if (xInput) xInput.value = xSlider.value;
     }
     
     if (zSlider) {
       zSlider.min = window.axisRanges.z.min;
       zSlider.max = window.axisRanges.z.max;
-      zSlider.value = getDefaultAxisValue(window.axisRanges.z);
+      zSlider.value = window.axisRanges.z.max;
       if (zInput) zInput.value = zSlider.value;
     }
-  }, 100); // Delay to ensure DOM is ready
+
+    // Also update sidebar active axis slider
+    const activeSlider = document.getElementById('active-clipping-slider');
+    const activeInput = document.getElementById('active-clipping-input');
+    if (activeSlider && window.sidebar && window.sidebar.getActiveAxis) {
+      const activeAxis = window.sidebar.getActiveAxis();
+      activeSlider.min = window.axisRanges[activeAxis].min;
+      activeSlider.max = window.axisRanges[activeAxis].max;
+      activeSlider.value = window.axisRanges[activeAxis].max;
+      if (activeInput) activeInput.value = activeSlider.value;
+    }
+  }, 100);
 
   // Expose animation functions globally
   window.setDistanceAnimation = function() {
@@ -964,17 +1000,41 @@ async function initializeModels() {
 
   if (loaderElement) {
     loaderElement.style.opacity = '0';
-    setTimeout(() => loaderElement.remove(), 500);
+    setTimeout(() => {
+      loaderElement.style.display = 'none';
+    }, 500);
   }
   
-  // Initialize sidebar controls
+  // Initialize/Update sidebar controls
   initSidebar(yClippingPlane, yClippingPlaneBottom, xClippingPlane, xClippingPlaneBack, zClippingPlane, zClippingPlaneFront, window.activeClippingPlanes, window.allPlanes, window.loadedPoints);
   updateVisibleColorRangeIfNeeded(true);
   
   updatePointCount();
+
+  // Reset view to fit the new model
+  resetCameraViewQuick();
 }
 
-initializeModels();
+// Add button event listeners for model switching
+function initModelSwitcher() {
+  const btnCanteen = document.getElementById('btn-canteen');
+  const btnBed = document.getElementById('btn-bed');
+
+  if (btnCanteen) {
+    btnCanteen.addEventListener('click', () => {
+      initializeModel(MODELS.canteen);
+    });
+  }
+
+  if (btnBed) {
+    btnBed.addEventListener('click', () => {
+      initializeModel(MODELS.bed);
+    });
+  }
+}
+
+initializeModel(MODELS.canteen); // Load canteen by default
+initModelSwitcher();
 bindMeasureControls();
 bindMeasurementUnitControl();
 setMeasureMode('level');
