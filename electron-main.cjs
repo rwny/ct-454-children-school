@@ -47,7 +47,7 @@ function createWindow() {
     fullscreenable: true,
     // Remove frame for kiosk-like experience (optional)
     // frame: false,
-    title: 'AR24',
+    title: 'metta school',
     icon: path.join(__dirname, 'public', 'vite.svg')
   });
 
